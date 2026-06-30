@@ -1,8 +1,6 @@
 // api/weather.js – Premium Weather API by Oye Buggu
-// Replace with your actual OpenWeather API key
-const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY';
+// 🔒 API key Vercel Environment Variables से ली जाएगी (OPENWEATHER_API_KEY)
 
-// Weather condition to emoji mapping
 const WEATHER_EMOJI = {
   Clear: '☀️',
   Clouds: '☁️',
@@ -39,17 +37,18 @@ export default async function handler(req, res) {
     });
   }
 
-  // Check API key
-  if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === 'YOUR_OPENWEATHER_API_KEY') {
+  // 🔑 API key Vercel के environment variable से लें
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+  if (!apiKey) {
     return res.status(500).json({
       success: false,
-      error: 'Server configuration error: API key not set.',
+      error: 'Server configuration error: OpenWeather API key not set in environment variables.',
     });
   }
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
     city
-  )}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=en`;
+  )}&appid=${apiKey}&units=metric&lang=en`;
 
   try {
     const response = await fetch(url);
@@ -65,8 +64,7 @@ export default async function handler(req, res) {
     const weatherMain = data.weather[0].main;
     const emoji = WEATHER_EMOJI[weatherMain] || '🌡️';
 
-    // Premium response with emojis and credit
-    const result = {
+    return res.status(200).json({
       success: true,
       city: `${data.name} 🏙️`,
       country: `${data.sys.country} 🌍`,
@@ -93,9 +91,7 @@ export default async function handler(req, res) {
         name: 'Oye Buggu',
         telegram: '@tera_paglu',
       },
-    };
-
-    return res.status(200).json(result);
+    });
   } catch (error) {
     console.error('Weather fetch error:', error);
     return res.status(500).json({
