@@ -1,6 +1,15 @@
 {
-  "name": "weather-api",
-  "version": "1.0.0",
-  "description": "Personal Weather API for Vercel",
-  "main": "api/weather.js"
+  "name": "premium-weather-api",
+  "version": "2.0.0",
+  "description": "Premium weather API with emojis – by Oye Buggu",
+  "type": "module",
+  "main": "api/weather.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["weather", "api", "vercel", "premium", "emoji"],
+  "author": "Oye Buggu",
+  "license": "MIT",
+  "dependencies": {}
 }
